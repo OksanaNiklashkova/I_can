@@ -6,13 +6,19 @@ from i_can.validators import HabitFieldsValidator
 
 class HabitSerializer(serializers.ModelSerializer):
     """ Сериализатор для объектов привычек """
-    model = Habit
-    fields = '__all__'
+    class Meta:
+        model = Habit
+        fields = '__all__'
+
+        extra_kwargs = {
+            'user': {'read_only': True},
+            'created_at': {'read_only': True},
+        }
 
     def validate(self, attrs):
         """Валидация на уровне сериализатора"""
         validator = HabitFieldsValidator()
-        validator(attrs)
+        validator(attrs, self.instance)
         return attrs
 
 

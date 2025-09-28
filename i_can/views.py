@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 
 
@@ -7,6 +6,7 @@ from i_can.models import Habit
 from i_can.pagination import HabitPagination
 from i_can.permissions import IsOwner
 from i_can.serializers import HabitSerializer, PublicHabitSerializer
+from i_can.validators import HabitFieldsValidator
 
 
 class HabitCreateAPIView(generics.CreateAPIView):
@@ -23,20 +23,23 @@ class HabitListAPIView(generics.ListAPIView):
     serializer_class = HabitSerializer
     pagination_class = HabitPagination
 
-    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filter_backends = [DjangoFilterBackend]
     filterset_fields = ('is_pleasant', 'periodicity', 'is_published',)
-    ordering_fields = ['-created_at']
 
     def get_queryset(self):
         return Habit.objects.filter(user=self.request.user)
+
 
 class PublicHabitListAPIView(generics.ListAPIView):
     serializer_class = PublicHabitSerializer
     pagination_class = HabitPagination
 
-    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filter_backends = [DjangoFilterBackend]
     filterset_fields = ('user', 'action', 'is_pleasant',)
-    ordering_fields = ['-created_at']
+
+    def get_queryset(self):
+        return Habit.objects.filter(is_published=True)
+
 
 class HabitRetrieveAPIView(generics.RetrieveAPIView):
     """Контроллер просмотра одной привычки"""

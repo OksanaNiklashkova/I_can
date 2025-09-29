@@ -1,11 +1,11 @@
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import include, path
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
 
 from . import settings
-from django.contrib import admin
-from django.urls import path, include
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -16,7 +16,7 @@ schema_view = get_schema_view(
         license=openapi.License(name='BSDLicense'),
     ),
     public=True,
-    permission_classes = (permissions.AllowAny,),
+    permission_classes=(permissions.AllowAny,),
 )
 
 urlpatterns = [

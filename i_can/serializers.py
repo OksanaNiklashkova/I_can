@@ -5,7 +5,8 @@ from i_can.validators import HabitFieldsValidator
 
 
 class HabitSerializer(serializers.ModelSerializer):
-    """ Сериализатор для объектов привычек """
+    """Сериализатор для объектов привычек"""
+
     class Meta:
         model = Habit
         fields = '__all__'
@@ -23,7 +24,8 @@ class HabitSerializer(serializers.ModelSerializer):
 
 
 class PublicHabitSerializer(serializers.ModelSerializer):
-    """ Сериализатор для публичных привычек """
+    """Сериализатор для публичных привычек"""
+
     class Meta:
         model = Habit
         fields = ("action", "is_pleasant", "execution_time")

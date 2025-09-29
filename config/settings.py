@@ -11,9 +11,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = bool(os.getenv('DEBUG')=='True')
+DEBUG = bool(os.getenv('DEBUG') == 'True')
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -107,9 +107,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': (
-        'django_filters.rest_framework.DjangoFilterBackend',
-    ),
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
@@ -138,7 +136,9 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = "Europe/Moscow"
 CELERY_TASK_TRACK_STARTED = True
-CELERY_TASK_TIME_LIMIT = 30*60
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+CELERY_ENABLE_UTC = False
 
 TELEGRAM_URL = 'https://api.telegram.org/bot'
 
@@ -147,7 +147,7 @@ BOT_TOKEN = os.getenv('BOT_TOKEN')
 CELERY_BEAT_SCHEDULE = {
     'send_reminders': {
         'task': 'i_can.tasks.send_reminder_to_telegram',
-        'schedule': crontab(minute='*/5'),  # Каждые 5 минут
+        'schedule': crontab(minute=0, hour='9-21/1'),  # Каждый час с 9 до 21
     },
     'reset_reminder_flags': {
         'task': 'i_can.tasks.reset_reminder_flags',

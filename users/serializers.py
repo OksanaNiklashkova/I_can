@@ -5,6 +5,7 @@ from users.models import User
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     """Сериализатор для регистрации"""
+
     password = serializers.CharField(write_only=True)
     password_confirm = serializers.CharField(write_only=True)
 

@@ -1,5 +1,7 @@
 import requests
-from config.settings import TELEGRAM_URL, BOT_TOKEN
+
+from config.settings import BOT_TOKEN, TELEGRAM_URL
+
 
 def send_telegram_message(tg_id, message):
     """Сервисная функция отправки сообщения в телеграмм"""

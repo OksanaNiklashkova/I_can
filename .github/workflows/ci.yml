@@ -87,7 +87,7 @@ jobs:
             cat > ~/myproject/.env << EOF
             SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}
             DEBUG=${{ secrets.DJANGO_DEBUG }}
-            ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }}
+            ALLOWED_HOSTS=${{ secrets.SERVER_IP }},localhost,127.0.0.1
             
             # Database
             POSTGRES_DB=${{ secrets.POSTGRES_DB }}

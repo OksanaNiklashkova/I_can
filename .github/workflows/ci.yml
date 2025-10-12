@@ -109,7 +109,14 @@ jobs:
             docker stop online_work || true
             docker rm online_work || true
             
+            # Добавляем пользователя в группу docker (если еще не добавлен)
+            sudo usermod -aG docker $USER 2>/dev/null || true
+            
+            # Используем sudo для Docker команд
+            sudo docker stop online_work || true
+            sudo docker rm online_work || true
+            
             # Запускаем новый контейнер
-            docker run -d --name online_work -p 80:8000 \
+            sudo docker run -d --name online_work -p 80:8000 \
               --env-file ~/myproject/.env \
               ${{ secrets.DOCKER_HUB_USERNAME }}/online_work:${{ github.sha }}

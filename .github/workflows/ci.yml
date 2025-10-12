@@ -83,10 +83,17 @@ jobs:
             # Создаем папку если нет
             mkdir -p ~/myproject
             
+            # Добавляем пользователя в группу docker (если еще не добавлен)
+            sudo usermod -aG docker $USER 2>/dev/null || true
+            
+            # Останавливаем и удаляем контейнер
+            sudo docker stop online_work || true
+            sudo docker rm online_work || true
+            
             # Создаем/обновляем .env файл с переменными из GitHub Secrets
             cat > ~/myproject/.env << EOF
             SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}
-            DEBUG=${{ secrets.DJANGO_DEBUG }}
+            DEBUG=False
             ALLOWED_HOSTS=${{ secrets.SERVER_IP }},localhost,127.0.0.1
             
             # Database
@@ -104,17 +111,6 @@ jobs:
             CELERY_BROKER_URL=${{ secrets.CELERY_BROKER_URL }}
             CELERY_RESULT_BACKEND=${{ secrets.CELERY_RESULT_BACKEND }}
             EOF
-            
-            # Останавливаем и удаляем старый контейнер
-            docker stop online_work || true
-            docker rm online_work || true
-            
-            # Добавляем пользователя в группу docker (если еще не добавлен)
-            sudo usermod -aG docker $USER 2>/dev/null || true
-            
-            # Используем sudo для Docker команд
-            sudo docker stop online_work || true
-            sudo docker rm online_work || true
             
             # Запускаем новый контейнер
             sudo docker run -d --name online_work -p 80:8000 \
